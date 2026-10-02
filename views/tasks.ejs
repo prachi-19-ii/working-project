@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-badge">W</div>
+          <span>Women for Change</span>
+        </div>
+        <nav class="navbar">
+          <a href="/dashboard">Dashboard</a>
+          <a href="/community">Community</a>
+          <a href="/chat">Messages</a>
+          <a href="/tasks">Tasks</a>
+          <a href="/announcements">Announcements</a>
+          <a href="/achievements">Achievements</a>
+          <a href="/activity">Activity</a>
+          <a href="/admin">Admin</a>
+          <a href="/logout">Logout</a>
+        </nav>
+      </header>
+
+      <main class="page-wrap">
+        <section class="stats-grid">
+          <div class="stat-box"><div class="stat-label">Total Users</div><div class="stat-number"><%= stats.total %></div></div>
+          <div class="stat-box"><div class="stat-label">Students</div><div class="stat-number"><%= stats.students %></div></div>
+          <div class="stat-box"><div class="stat-label">Alumni</div><div class="stat-number"><%= stats.alumni %></div></div>
+          <div class="stat-box"><div class="stat-label">Teachers</div><div class="stat-number"><%= stats.teachers %></div></div>
+          <div class="stat-box"><div class="stat-label">Mentors</div><div class="stat-number"><%= stats.mentors %></div></div>
+        </section>
+
+        <section class="card" style="margin-top: 28px;">
+          <h2 class="section-title">Add User</h2>
+          <form action="/admin/users" method="POST">
+            <div class="form-grid">
+              <div>
+                <label>Full Name</label>
+                <input type="text" name="full_name" required />
+              </div>
+              <div>
+                <label>Email</label>
+                <input type="email" name="email" required />
+              </div>
+              <div>
+                <label>Phone</label>
+                <input type="text" name="phone" />
+              </div>
+              <div>
+                <label>Department</label>
+                <input type="text" name="department" />
+              </div>
+              <div>
+                <label>Role</label>
+                <select name="role">
+                  <option value="student">Student</option>
+                  <option value="alumni">Alumni</option>
+                  <option value="teacher">Teacher</option>
+                  <option value="mentor">Mentor</option>
+                </select>
+              </div>
+              <div style="display:flex; align-items: end;">
+                <button type="submit" class="btn btn-primary">Create account</button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <section class="card" style="margin-top: 28px;">
+          <h2 class="section-title">All Members</h2>
+          <ul class="list">
+            <% users.forEach((member) => { %>
+              <li class="list-item">
+                <strong><%= member.full_name %></strong>
+                <div><%= member.role %> · <%= member.department || 'General' %></div>
+                <div class="muted"><%= member.email %></div>
+              </li>
+            <% }) %>
+          </ul>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

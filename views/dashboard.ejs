@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WFC Dashboard</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-badge">W</div>
+          <span>Women for Change</span>
+        </div>
+        <nav class="navbar">
+          <a href="/dashboard">Dashboard</a>
+          <a href="/community">Community</a>
+          <a href="/chat">Messages</a>
+          <a href="/tasks">Tasks</a>
+          <a href="/announcements">Announcements</a>
+          <a href="/achievements">Achievements</a>
+          <a href="/activity">Activity</a>
+          <% if (user.role === 'admin') { %>
+            <a href="/admin">Admin</a>
+          <% } %>
+          <a href="/logout">Logout</a>
+        </nav>
+      </header>
+
+      <main class="page-wrap">
+        <section class="hero card">
+          <h1>Welcome, <%= user.full_name %></h1>
+          <p>
+            Your WFC community dashboard brings together students, alumni, mentors, teachers, and administrators into one collaborative network for learning, achievements, updates, and progress tracking.
+          </p>
+        </section>
+
+        <section class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-label">My Role</div>
+            <div class="stat-number"><%= roleLabel %></div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Department</div>
+            <div class="stat-number" style="font-size: 1.3rem;"><%= user.department || 'General' %></div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Announcements</div>
+            <div class="stat-number"><%= announcements.length %></div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Tasks</div>
+            <div class="stat-number"><%= tasks.length %></div>
+          </div>
+        </section>
+
+        <section class="dashboard-grid">
+          <div class="card">
+            <h2 class="section-title">Recent Announcements</h2>
+            <ul class="list">
+              <% announcements.forEach((item) => { %>
+                <li class="list-item">
+                  <strong><%= item.title %></strong>
+                  <div><%= item.content %></div>
+                  <div class="muted" style="margin-top: 8px;">By <%= item.author_name %> · <%= new Date(item.created_at).toLocaleDateString() %></div>
+                </li>
+              <% }) %>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h2 class="section-title">My Tasks</h2>
+            <ul class="list">
+              <% tasks.forEach((task) => { %>
+                <li class="list-item">
+                  <strong><%= task.title %></strong>
+                  <div><%= task.description %></div>
+                  <div class="muted" style="margin-top: 8px;">Status: <%= task.status %></div>
+                </li>
+              <% }) %>
+            </ul>
+          </div>
+        </section>
+
+        <section class="card" style="margin-top: 28px;">
+          <h2 class="section-title">Community Highlights</h2>
+          <div class="community-grid">
+            <% community.forEach((member) => { %>
+              <div class="profile-card">
+                <div class="avatar"><%= member.full_name.split(' ').map(name => name[0]).slice(0,2).join('').toUpperCase() %></div>
+                <h3><%= member.full_name %></h3>
+                <div class="meta-row">
+                  <span class="pill"><%= member.role %></span>
+                  <span class="pill"><%= member.department || 'Community Member' %></span>
+                </div>
+                <div class="muted"><%= member.email %></div>
+                <div class="btn-row">
+                  <a class="btn btn-primary" href="/profile/<%= member.id %>">View profile</a>
+                  <a class="btn btn-secondary" href="/chat?user=<%= member.id %>">Message</a>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

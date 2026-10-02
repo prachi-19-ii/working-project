@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-badge">W</div>
+          <span>Women for Change</span>
+        </div>
+        <nav class="navbar">
+          <a href="/dashboard">Dashboard</a>
+          <a href="/community">Community</a>
+          <a href="/chat">Messages</a>
+          <a href="/tasks">Tasks</a>
+          <a href="/announcements">Announcements</a>
+          <a href="/achievements">Achievements</a>
+          <a href="/activity">Activity</a>
+          <% if (currentUser.role === 'admin') { %><a href="/admin">Admin</a><% } %>
+          <a href="/logout">Logout</a>
+        </nav>
+      </header>
+
+      <main class="page-wrap">
+        <section class="card profile-grid">
+          <div>
+            <div class="profile-header">
+              <div class="avatar"><%= targetUser.full_name.split(' ').map(name => name[0]).slice(0,2).join('').toUpperCase() %></div>
+              <div>
+                <h1 style="margin:0; font-size: 2rem;"> <%= targetUser.full_name %></h1>
+                <div class="meta-row">
+                  <span class="pill"><%= targetUser.role %></span>
+                  <span class="pill"><%= targetUser.department || 'Community Member' %></span>
+                </div>
+              </div>
+            </div>
+
+            <p class="muted"><%= targetUser.email %> • <%= targetUser.phone || 'No phone added' %></p>
+            <p><%= targetUser.bio || 'This member has not added a bio yet.' %></p>
+
+            <% if (canMessage) { %>
+              <div class="btn-row">
+                <a class="btn btn-primary" href="/chat?user=<%= targetUser.id %>">Send message</a>
+              </div>
+            <% } %>
+          </div>
+
+          <div>
+            <h3>Achievements</h3>
+            <ul class="list">
+              <% achievements.forEach((achievement) => { %>
+                <li class="list-item">
+                  <strong><%= achievement.title %></strong>
+                  <div><%= achievement.description %></div>
+                </li>
+              <% }) %>
+            </ul>
+          </div>
+        </section>
+
+        <section class="card" style="margin-top: 28px;">
+          <h2 class="section-title">Class Activity & Posts</h2>
+          <ul class="list">
+            <% posts.forEach((post) => { %>
+              <li class="list-item">
+                <strong><%= post.title %></strong>
+                <div><%= post.content %></div>
+              </li>
+            <% }) %>
+          </ul>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

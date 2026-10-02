@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Messages</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-badge">W</div>
+          <span>Women for Change</span>
+        </div>
+        <nav class="navbar">
+          <a href="/dashboard">Dashboard</a>
+          <a href="/community">Community</a>
+          <a href="/chat">Messages</a>
+          <a href="/tasks">Tasks</a>
+          <a href="/announcements">Announcements</a>
+          <a href="/achievements">Achievements</a>
+          <a href="/activity">Activity</a>
+          <% if (user.role === 'admin') { %><a href="/admin">Admin</a><% } %>
+          <a href="/logout">Logout</a>
+        </nav>
+      </header>
+
+      <main class="page-wrap">
+        <section class="card chat-layout">
+          <div class="chat-list">
+            <h2 class="section-title">Contacts</h2>
+            <% contacts.forEach((contact) => { %>
+              <a href="/chat?user=<%= contact.id %>">
+                <div class="chat-item">
+                  <strong><%= contact.full_name %></strong>
+                  <div class="muted"><%= contact.role %></div>
+                </div>
+              </a>
+            <% }) %>
+          </div>
+
+          <div>
+            <% if (selectedUser) { %>
+              <h2 class="section-title">Chat with <%= selectedUser.full_name %></h2>
+              <div class="chat-thread">
+                <% messages.forEach((msg) => { %>
+                  <div class="message <%= msg.sender_id === user.id ? 'me' : 'other' %>">
+                    <div style="font-size: 0.72rem; opacity: 0.8; margin-bottom: 6px;"> <%= msg.sender_name %> </div>
+                    <div><%= msg.message %></div>
+                  </div>
+                <% }) %>
+              </div>
+
+              <form action="/chat" method="POST" style="margin-top: 18px;">
+                <input type="hidden" name="receiver_id" value="<%= selectedUser.id %>" />
+                <textarea name="message" placeholder="Write your message here..." required></textarea>
+                <div class="btn-row">
+                  <button type="submit" class="btn btn-primary">Send</button>
+                </div>
+              </form>
+            <% } else { %>
+              <h2 class="section-title">Select a contact</h2>
+              <p class="muted">Choose a user from the left panel to start a private conversation.</p>
+            <% } %>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

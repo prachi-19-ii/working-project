@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Achievements</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-badge">W</div>
+          <span>Women for Change</span>
+        </div>
+        <nav class="navbar">
+          <a href="/dashboard">Dashboard</a>
+          <a href="/community">Community</a>
+          <a href="/chat">Messages</a>
+          <a href="/tasks">Tasks</a>
+          <a href="/announcements">Announcements</a>
+          <a href="/achievements">Achievements</a>
+          <a href="/activity">Activity</a>
+          <% if (user.role === 'admin') { %><a href="/admin">Admin</a><% } %>
+          <a href="/logout">Logout</a>
+        </nav>
+      </header>
+
+      <main class="page-wrap">
+        <section class="card">
+          <h2 class="section-title">Add Achievement</h2>
+          <form action="/achievements" method="POST">
+            <div class="form-grid">
+              <div>
+                <label>Achievement Title</label>
+                <input type="text" name="title" required />
+              </div>
+              <div>
+                <label>Student/Member ID</label>
+                <input type="number" name="user_id" value="<%= user.id %>" />
+              </div>
+              <div style="grid-column: 1 / -1;">
+                <label>Description</label>
+                <textarea name="description" required></textarea>
+              </div>
+              <div style="grid-column: 1 / -1;">
+                <button type="submit" class="btn btn-primary">Save Achievement</button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <section class="card" style="margin-top: 28px;">
+          <h2 class="section-title">Achievement Wall</h2>
+          <ul class="list">
+            <% achievements.forEach((item) => { %>
+              <li class="list-item">
+                <strong><%= item.title %></strong>
+                <div><%= item.description %></div>
+                <div class="muted">Awarded to <%= item.full_name %> on <%= new Date(item.created_at).toLocaleDateString() %></div>
+              </li>
+            <% }) %>
+          </ul>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
